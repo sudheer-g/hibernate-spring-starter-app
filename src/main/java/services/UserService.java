@@ -1,6 +1,6 @@
 package services;
 
-import entities.User;
+import models.User;
 
 public interface UserService {
 
