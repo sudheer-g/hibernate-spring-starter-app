@@ -4,9 +4,9 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="models.User" table="USER">
+    <class name="com.models.User" table="USER">
         <id name="userId" type="int" column="USER_ID">
-            <generator class="identity" />
+            <generator class="native" />
         </id>
         <property name="username">
             <column name="USERNAME" />

@@ -1,18 +1,27 @@
-package controllers;
+package com.controllers;
 
 
-import models.User;
+import com.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import services.UserService;
+import com.services.UserService;
+
+
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    @Qualifier("com.services.UserService")
     private UserService userService;
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
+    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public User createUser(@ModelAttribute("user") User user) {
+        System.out.println("Hit createUser");
+        System.out.println(user.toString());
         return userService.create(user);
     }
 

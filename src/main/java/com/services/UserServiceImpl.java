@@ -1,25 +1,30 @@
-package services;
+package com.services;
 
-import dao.UserDao;
-import models.User;
+import com.dao.UserDao;
+import com.models.User;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@Service("hrdb.UserService")
+@Service("com.services.UserService")
 public class UserServiceImpl implements UserService{
 
+    @Autowired
+    @Qualifier("com.dao.UserDao")
     private UserDao userDao;
 
     @Override
     @Transactional
     public User create(User user) {
-        return null;
+        return userDao.save(user);
     }
 
     @Override
     public User getById(int id) {
-        return null;
+        return userDao.getById(id);
     }
 
     @Override
