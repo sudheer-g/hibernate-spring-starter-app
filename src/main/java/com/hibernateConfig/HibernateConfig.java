@@ -1,29 +1,63 @@
 package com.hibernateConfig;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.sql.DataSource;
+import java.util.Properties;
+
+
+@Configuration
+@EnableTransactionManagement
 public class HibernateConfig {
-    private static SessionFactory sessionFactory = createSessionFactory();
 
-    private static SessionFactory createSessionFactory() {
-        System.out.println("Hit createSessionFactory");
-        if (sessionFactory == null) {
-            StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-            Metadata metaData = new MetadataSources(standardRegistry).getMetadataBuilder().build();
-            sessionFactory = metaData.getSessionFactoryBuilder().build();
-        }
+    @Autowired
+    private Environment env;
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan(
+                new String[]{"com.models"});
+        sessionFactory.setHibernateProperties(hibernateProperties());
+
         return sessionFactory;
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/hrdb");
+        dataSource.setUsername("root");
+        dataSource.setPassword("pramati");
+        return dataSource;
     }
 
-    public static void shutdown() {
-        sessionFactory.getCurrentSession().close();
+    @Bean
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager
+                = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
+
+    private final Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(
+                "hibernate.hbm2ddl.auto", "update");
+        hibernateProperties.setProperty(
+                "hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        hibernateProperties.setProperty(
+                "show_sql", "true");
+        return hibernateProperties;
     }
 }

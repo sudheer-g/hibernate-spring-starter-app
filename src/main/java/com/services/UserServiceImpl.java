@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service("com.services.UserService")
+@Transactional
 public class UserServiceImpl implements UserService{
 
     @Autowired
@@ -17,7 +18,6 @@ public class UserServiceImpl implements UserService{
     private UserDao userDao;
 
     @Override
-    @Transactional
     public User create(User user) {
         return userDao.save(user);
     }
@@ -28,12 +28,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User editUser(int id) {
-        return null;
+    public User update(User user) {
+        return userDao.save(user);
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public User delete(int id) {
+        return userDao.remove(id);
     }
 }

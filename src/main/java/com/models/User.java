@@ -1,10 +1,13 @@
 package com.models;
 
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 
+@Entity
+@Table(name = "`USER`")
 public class User implements Serializable {
 
     private Integer userId;
@@ -13,6 +16,9 @@ public class User implements Serializable {
     private String role;
     private Integer tenantId;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "`USER_ID`", nullable = false, scale = 0, precision = 10)
     public Integer getUserId() {
         return this.userId;
     }
@@ -21,6 +27,7 @@ public class User implements Serializable {
         this.userId = userId;
     }
 
+    @Column(name = "`USERNAME`", nullable = true, length = 20)
     public String getUsername() {
         return this.username;
     }
@@ -29,6 +36,7 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    @Column(name = "`PASSWORD`", nullable = true, length = 20)
     public String getPassword() {
         return this.password;
     }
@@ -37,6 +45,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @Column(name = "`ROLE`", nullable = true, length = 20)
     public String getRole() {
         return this.role;
     }
@@ -45,6 +54,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    @Column(name = "`TENANT_ID`", nullable = true, scale = 0, precision = 10)
     public Integer getTenantId() {
         return this.tenantId;
     }
@@ -65,5 +75,10 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getUserId());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

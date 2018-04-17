@@ -1,27 +1,21 @@
 package com.dao;
 
-import com.hibernateConfig.HibernateConfig;
 import com.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-
 
 @Repository("com.dao.UserDao")
-@Transactional
 public class UserDao {
 
-    private SessionFactory sessionFactory = HibernateConfig.getSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public User save(User user) {
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
+        Session currentSession = sessionFactory.getCurrentSession();
         currentSession.saveOrUpdate(user);
-        transaction.commit();
         currentSession.refresh(user);
         return user;
     }
@@ -31,9 +25,12 @@ public class UserDao {
         return currentSession.get(User.class, userId);
     }
 
-    public void remove(User user) {
+    public User remove(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        currentSession.remove(user);
+        User deleted = getById(id);
+        currentSession.remove(deleted);
+        currentSession.flush();
+        return deleted;
     }
 
-}
+};

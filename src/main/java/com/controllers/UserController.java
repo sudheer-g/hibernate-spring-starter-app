@@ -18,8 +18,8 @@ public class UserController {
     @Qualifier("com.services.UserService")
     private UserService userService;
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public User createUser(@ModelAttribute("user") User user) {
+    @PostMapping
+    public User createUser(@RequestBody User user) {
         System.out.println("Hit createUser");
         System.out.println(user.toString());
         return userService.create(user);
@@ -31,13 +31,15 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id:.+}")
-    public User editUser(@PathVariable("id") Integer id) {
-        return userService.editUser(id);
+    public User editUser(@PathVariable("id") Integer id, @RequestBody User user) {
+        user.setUserId(id);
+        return userService.update(user);
     }
 
     @PostMapping(value = "/{id:.+}")
     public boolean deleteUser(@PathVariable("id") Integer id) {
-        return userService.delete(id);
+        User deleted = userService.delete(id);
+        return deleted != null;
     }
 
 }
