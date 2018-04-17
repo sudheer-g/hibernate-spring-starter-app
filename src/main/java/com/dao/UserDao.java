@@ -16,6 +16,7 @@ public class UserDao {
     public User save(User user) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.saveOrUpdate(user);
+        currentSession.flush();
         currentSession.refresh(user);
         return user;
     }

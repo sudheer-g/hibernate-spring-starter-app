@@ -2,12 +2,10 @@ package com.controllers;
 
 
 import com.models.User;
+import com.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.services.UserService;
-
 
 
 @RestController
@@ -20,8 +18,6 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        System.out.println("Hit createUser");
-        System.out.println(user.toString());
         return userService.create(user);
     }
 
