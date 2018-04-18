@@ -1,6 +1,6 @@
 package com.services;
 
-import com.dao.UserDao;
+import com.dao.GenericDao;
 import com.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,25 +14,25 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     @Qualifier("com.dao.UserDao")
-    private UserDao userDao;
+    private GenericDao<User, Integer> genericDao;
 
     @Override
     public User create(User user) {
-        return userDao.save(user);
+        return genericDao.save(user);
     }
 
     @Override
     public User getById(int id) {
-        return userDao.getById(id);
+        return genericDao.getById(id);
     }
 
     @Override
     public User update(User user) {
-        return userDao.save(user);
+        return genericDao.save(user);
     }
 
     @Override
     public User delete(int id) {
-        return userDao.remove(id);
+        return genericDao.remove(id);
     }
 }
